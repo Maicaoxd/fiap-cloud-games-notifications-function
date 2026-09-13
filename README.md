@@ -107,6 +107,18 @@ dotnet test tests/NotificationsFunction.Tests/NotificationsFunction.Tests.csproj
 
 Os testes cobrem envelopes inválidos, validação dos eventos, rastreabilidade e notificações de pagamentos aprovados e rejeitados.
 
+## Publicar a imagem no Docker Hub
+
+A imagem publicada é maicaoxd/fiap-cloud-games-notifications-function:0.1.0, para Linux amd64. Para publicar no seu próprio namespace, substitua maicaoxd nos comandos e no Compose.
+
+```powershell
+docker login
+docker build --platform linux/amd64 -t maicaoxd/fiap-cloud-games-notifications-function:0.1.0 .
+docker push maicaoxd/fiap-cloud-games-notifications-function:0.1.0
+```
+
+A publicação da imagem no Docker Hub não cria recursos na Azure. Os parâmetros RabbitMQ e Storage são fornecidos somente na execução, por variáveis de ambiente.
+
 ## Consumo e tratamento de erros
 
 A confirmação de consumo é gerenciada pelo binding RabbitMQ. Eventos inválidos lançam JsonException, sem registrar sucesso. Retries, filas _error e Fault<T> do MassTransit não são herdados pelo binding; políticas de reentrega e DLX/DLQ dependem da configuração do broker.

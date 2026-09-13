@@ -47,7 +47,7 @@ services:
 
   notifications-function:
     build: .
-    image: fiap-cloud-games-notifications-function:local
+    image: maicaoxd/fiap-cloud-games-notifications-function:0.1.0
     environment:
       AzureWebJobsStorage: "DefaultEndpointsProtocol=http;AccountName=fcglocal;AccountKey=ZmlhcC1jbG91ZC1nYW1lcy1sb2NhbC1zdG9yYWdlLWtleQ==;BlobEndpoint=http://azurite:10000/fcglocal;QueueEndpoint=http://azurite:10001/fcglocal;TableEndpoint=http://azurite:10002/fcglocal"
       RabbitMQConnection: "${FCG_RABBITMQ_CONNECTION:-amqp://guest:guest@rabbitmq:5672/%2F}"

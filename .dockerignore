@@ -15,3 +15,11 @@ __blobstorage__
 __queuestorage__
 azurite-data
 *.log
+**/*.md
+**/.env*
+**/local.settings*.json
+**/*.pfx
+**/*.p12
+**/*.publishsettings
+**/TestResults
+**/.git
