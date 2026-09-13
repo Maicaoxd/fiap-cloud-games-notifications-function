@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "RabbitMQConnection": "amqp://REPLACE_USER:REPLACE_PASSWORD@127.0.0.1:5672/%2F",
+    "UserCreatedQueue": "notifications-user-created-event",
+    "PaymentProcessedQueue": "notifications-payment-processed-event",
+    "AzureWebJobs.UserCreatedFunction.Disabled": "true",
+    "AzureWebJobs.PaymentProcessedFunction.Disabled": "true"
+  }
+}
