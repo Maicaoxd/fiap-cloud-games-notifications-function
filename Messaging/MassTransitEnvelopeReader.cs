@@ -55,7 +55,7 @@ public static class MassTransitEnvelopeReader
             payload.ValueKind != JsonValueKind.Object)
             throw new JsonException("O envelope exige um objeto no campo message.");
 
-        // Detect missing constructor fields rather than accepting default Guid/decimal values.
+        // Rejeita campos obrigatórios ausentes antes de aceitar valores padrão de Guid ou decimal.
         var required = typeof(T) == typeof(UserCreatedEvent)
             ? new[] { "userId", "name", "email", "createdAt" }
             : new[] { "orderId", "userId", "games", "totalPrice", "status", "processedAt" };
