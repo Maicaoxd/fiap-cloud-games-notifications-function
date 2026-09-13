@@ -18,7 +18,7 @@ docker compose -f docker-compose.dev.yml ps -a
 docker compose -f docker-compose.dev.yml logs -f notifications-function
 ```
 
-O ambiente inclui a Function, RabbitMQ, Azurite e um inicializador idempotente das filas e bindings. As configurações vêm do Compose, não de local.settings.json.
+O ambiente inclui a Function, RabbitMQ, Azurite e um inicializador idempotente das filas e bindings. O inicializador usa PowerShell 7.4 e executa rabbitmq/configure-rabbitmq.ps1 com as definições de rabbitmq/definitions.json. As configurações vêm do Compose, não de local.settings.json.
 
 | Componente | Acesso local |
 | --- | --- |
