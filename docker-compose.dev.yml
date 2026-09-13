@@ -9,10 +9,11 @@ services:
       - "127.0.0.1:5673:5672"
       - "127.0.0.1:15673:15672"
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      test: ["CMD", "gosu", "rabbitmq", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 5s
       timeout: 5s
       retries: 20
+      start_period: 30s
 
   rabbitmq-topology:
     image: mcr.microsoft.com/powershell:7.4-ubuntu-22.04

@@ -23,3 +23,5 @@ azurite-data
 **/*.publishsettings
 **/TestResults
 **/.git
+k8s
+rabbitmq

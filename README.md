@@ -63,6 +63,8 @@ O Compose independente usa outro broker e não recebe automaticamente os eventos
 
 ## Executar no Kubernetes local
 
+O diretório k8s deste repositório contém a infraestrutura como código da Function e do Azurite. A base da orquestração inclui esse diretório diretamente, preservando uma única definição dos recursos.
+
 Na raiz do repositório fiap-cloud-games-orchestration, confirme o contexto local e aplique a base:
 
 ```powershell
@@ -76,6 +78,8 @@ kubectl logs deployment/notifications-function -c notifications-function -n fiap
 Os initContainers aguardam o Azurite e executam configure-rabbitmq.ps1 antes de iniciar os triggers. O ConfigMap é gerado diretamente dos arquivos desta pasta rabbitmq, sem cópias do configurador. O armazenamento do emulador usa um PVC de 1 GiB; os volumes Docker e Kubernetes são independentes.
 
 notifications-function-secret fornece RabbitMQConnection e AzureWebJobsStorage. As configurações precisam corresponder a rabbitmq-secret e azurite-secret. A base mantém todos os endpoints internos e não cria recursos na Azure nem configura Application Insights.
+
+Para instalar somente Function e Azurite em um cluster já preparado, crie o namespace fiap-cloud-games e disponibilize o Service rabbitmq, a interface Management na porta 15672 e rabbitmq-secret com RABBITMQ_DEFAULT_USER e RABBITMQ_DEFAULT_PASS. Na raiz deste repositório, execute kubectl apply -k ./k8s. A instalação isolada não inclui APIs, Gateway ou coleta centralizada de logs.
 
 Para testar pelo Kong, em outro terminal:
 
