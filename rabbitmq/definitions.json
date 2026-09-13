@@ -1,0 +1,18 @@
+{
+  "exchanges": [
+    {"name":"FiapCloudGames.Contracts.Events:UserCreatedEvent","vhost":"/","type":"fanout","durable":true,"auto_delete":false,"internal":false,"arguments":{}},
+    {"name":"FiapCloudGames.Contracts.Events:PaymentProcessedEvent","vhost":"/","type":"fanout","durable":true,"auto_delete":false,"internal":false,"arguments":{}},
+    {"name":"notifications-user-created-event","vhost":"/","type":"fanout","durable":true,"auto_delete":false,"internal":false,"arguments":{}},
+    {"name":"notifications-payment-processed-event","vhost":"/","type":"fanout","durable":true,"auto_delete":false,"internal":false,"arguments":{}}
+  ],
+  "queues": [
+    {"name":"notifications-user-created-event","vhost":"/","durable":true,"auto_delete":false,"arguments":{}},
+    {"name":"notifications-payment-processed-event","vhost":"/","durable":true,"auto_delete":false,"arguments":{}}
+  ],
+  "bindings": [
+    {"source":"FiapCloudGames.Contracts.Events:UserCreatedEvent","vhost":"/","destination":"notifications-user-created-event","destination_type":"exchange","routing_key":"","arguments":{}},
+    {"source":"FiapCloudGames.Contracts.Events:PaymentProcessedEvent","vhost":"/","destination":"notifications-payment-processed-event","destination_type":"exchange","routing_key":"","arguments":{}},
+    {"source":"notifications-user-created-event","vhost":"/","destination":"notifications-user-created-event","destination_type":"queue","routing_key":"","arguments":{}},
+    {"source":"notifications-payment-processed-event","vhost":"/","destination":"notifications-payment-processed-event","destination_type":"queue","routing_key":"","arguments":{}}
+  ]
+}
