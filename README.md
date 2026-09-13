@@ -61,6 +61,32 @@ Esse ambiente contém as APIs, bancos, Gateway, RabbitMQ, Function e Azurite. N�
 
 O Compose independente usa outro broker e não recebe automaticamente os eventos da orquestração.
 
+## Executar no Kubernetes local
+
+Na raiz do repositório fiap-cloud-games-orchestration, confirme o contexto local e aplique a base:
+
+```powershell
+kubectl config current-context
+kubectl apply -k .\k8s
+kubectl rollout status deployment/azurite -n fiap-cloud-games --timeout=300s
+kubectl rollout status deployment/notifications-function -n fiap-cloud-games --timeout=600s
+kubectl logs deployment/notifications-function -c notifications-function -n fiap-cloud-games --follow
+```
+
+Os initContainers aguardam o Azurite e executam configure-rabbitmq.ps1 antes de iniciar os triggers. O ConfigMap é gerado diretamente dos arquivos desta pasta rabbitmq, sem cópias do configurador. O armazenamento do emulador usa um PVC de 1 GiB; os volumes Docker e Kubernetes são independentes.
+
+notifications-function-secret fornece RabbitMQConnection e AzureWebJobsStorage. As configurações precisam corresponder a rabbitmq-secret e azurite-secret. A base mantém todos os endpoints internos e não cria recursos na Azure nem configura Application Insights.
+
+Para testar pelo Kong, em outro terminal:
+
+```powershell
+kubectl port-forward svc/kong-proxy 8005:8000 --address 127.0.0.1 -n fiap-cloud-games
+```
+
+Use http://localhost:8005 para cadastro, login, compra e consulta da biblioteca, como no fluxo Docker. Para consultar o configurador, use kubectl logs deployment/notifications-function -c configure-rabbitmq -n fiap-cloud-games.
+
+NotificationsAPI não faz parte da base padrão. Em um cluster existente, reduza seu Deployment a zero antes de iniciar a Function. A implementação legada permanece disponível em k8s/notifications-api da orquestração; pare a Function antes de aplicá-la.
+
 ## Executar fora do container
 
 Copie local.settings.example.json para local.settings.json somente se o arquivo de destino ainda não existir. O arquivo local é ignorado pelo Git.
