@@ -3,8 +3,8 @@ services:
     image: rabbitmq:3.13-management
     hostname: rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: "${FCG_RABBITMQ_USERNAME:?Defina FCG_RABBITMQ_USERNAME no arquivo .env}"
+      RABBITMQ_DEFAULT_PASS: "${FCG_RABBITMQ_PASSWORD:?Defina FCG_RABBITMQ_PASSWORD no arquivo .env}"
     ports:
       - "127.0.0.1:5673:5672"
       - "127.0.0.1:15673:15672"
@@ -19,8 +19,8 @@ services:
     image: mcr.microsoft.com/powershell:7.4-ubuntu-22.04
     command: ["pwsh", "-NoProfile", "-File", "/config/configure-rabbitmq.ps1"]
     environment:
-      RABBITMQ_USERNAME: guest
-      RABBITMQ_PASSWORD: guest
+      RABBITMQ_USERNAME: "${FCG_RABBITMQ_USERNAME:?Defina FCG_RABBITMQ_USERNAME no arquivo .env}"
+      RABBITMQ_PASSWORD: "${FCG_RABBITMQ_PASSWORD:?Defina FCG_RABBITMQ_PASSWORD no arquivo .env}"
     volumes:
       - ./rabbitmq:/config:ro
     depends_on:
@@ -33,7 +33,7 @@ services:
     command: azurite --location /data --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --disableProductStyleUrl
     environment:
       # Conta ficticia exclusiva do emulador, sem relacao com uma conta Azure.
-      AZURITE_ACCOUNTS: "fcglocal:ZmlhcC1jbG91ZC1nYW1lcy1sb2NhbC1zdG9yYWdlLWtleQ=="
+      AZURITE_ACCOUNTS: "${FCG_AZURITE_ACCOUNTS:?Defina FCG_AZURITE_ACCOUNTS no arquivo .env}"
     ports:
       - "127.0.0.1:10010:10000"
       - "127.0.0.1:10011:10001"
@@ -50,8 +50,8 @@ services:
     build: .
     image: maicaoxd/fiap-cloud-games-notifications-function:0.1.0
     environment:
-      AzureWebJobsStorage: "DefaultEndpointsProtocol=http;AccountName=fcglocal;AccountKey=ZmlhcC1jbG91ZC1nYW1lcy1sb2NhbC1zdG9yYWdlLWtleQ==;BlobEndpoint=http://azurite:10000/fcglocal;QueueEndpoint=http://azurite:10001/fcglocal;TableEndpoint=http://azurite:10002/fcglocal"
-      RabbitMQConnection: "${FCG_RABBITMQ_CONNECTION:-amqp://guest:guest@rabbitmq:5672/%2F}"
+      AzureWebJobsStorage: "${FCG_AZURE_STORAGE_CONNECTION:?Defina FCG_AZURE_STORAGE_CONNECTION no arquivo .env}"
+      RabbitMQConnection: "${FCG_RABBITMQ_CONNECTION:?Defina FCG_RABBITMQ_CONNECTION no arquivo .env}"
       UserCreatedQueue: notifications-user-created-event
       PaymentProcessedQueue: notifications-payment-processed-event
       AzureWebJobs.UserCreatedFunction.Disabled: "false"

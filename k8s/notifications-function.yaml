@@ -10,17 +10,6 @@ data:
   AzureWebJobs.UserCreatedFunction.Disabled: "false"
   AzureWebJobs.PaymentProcessedFunction.Disabled: "false"
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: notifications-function-secret
-  namespace: fiap-cloud-games
-type: Opaque
-stringData:
-  # Credenciais acadêmicas locais; a chave de armazenamento pertence ao emulador.
-  RabbitMQConnection: "amqp://guest:guest@rabbitmq:5672/%2F"
-  AzureWebJobsStorage: "DefaultEndpointsProtocol=http;AccountName=fcglocal;AccountKey=ZmlhcC1jbG91ZC1nYW1lcy1sb2NhbC1zdG9yYWdlLWtleQ==;BlobEndpoint=http://azurite:10000/fcglocal;QueueEndpoint=http://azurite:10001/fcglocal;TableEndpoint=http://azurite:10002/fcglocal"
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:

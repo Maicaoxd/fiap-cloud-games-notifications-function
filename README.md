@@ -8,6 +8,10 @@ Azure Functions v4 com worker isolado .NET 10 para consumir eventos do RabbitMQ 
 - .NET 10 SDK para compilar e testar.
 - Azure Functions Core Tools v4 com suporte a .NET 10 para executar fora do container.
 
+## Configuração local
+
+Em um checkout novo, copie `.env.example` para `.env` e configure as credenciais do RabbitMQ, a conta do Azurite e a conexão de armazenamento. Para Kubernetes, copie `k8s/local-secrets.example.yaml` para `k8s/local-secrets.yaml` e preencha os valores. Para o host local, preencha `local.settings.json` a partir do exemplo. Esses arquivos locais são ignorados pelo Git e pelo build Docker.
+
 ## Executar com Docker
 
 Na raiz deste repositório:
@@ -23,7 +27,7 @@ O ambiente inclui a Function, RabbitMQ, Azurite e um inicializador idempotente d
 | Componente | Acesso local |
 | --- | --- |
 | RabbitMQ AMQP | localhost:5673 |
-| RabbitMQ Management | http://localhost:15673 — guest / guest |
+| RabbitMQ Management | http://localhost:15673 — credenciais de `.env` |
 | Host da Function | http://localhost:7072 |
 | Azurite — Blob, Queue e Table | localhost:10010, 10011 e 10012 |
 

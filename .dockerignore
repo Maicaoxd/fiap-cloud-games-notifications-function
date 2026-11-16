@@ -1,3 +1,10 @@
+.env
+.env.*
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/local.settings.json
+**/local-secrets.yaml
+
 .git
 .vs
 .vscode
