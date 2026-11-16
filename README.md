@@ -162,3 +162,9 @@ Não há deduplicação persistente: uma reentrega pode repetir a notificação 
 O Dockerfile usa a imagem oficial do host Azure Functions. Arquivos local.settings*, .env*, certificados, testes e Git são excluídos da imagem. Azurite usa armazenamento local com volume; esse ambiente não demonstra autoscaling ou scale-to-zero em nuvem.
 
 Referências: [trigger RabbitMQ](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-rabbitmq-trigger) e [envelope MassTransit](https://masstransit.io/documentation/configuration/serialization).
+
+## CI/CD
+
+Pushes para master executam testes e publicam a imagem no ACR. Quando AZURE_FUNCTIONAPP_NAME está configurada, o workflow também publica o mesmo commit por ZIP na Function App existente. Sem essa variável, o CD fica desabilitado. Pull requests executam testes e build sem publicar. O trigger RabbitMQ exige plano Elastic Premium ou Dedicated e conectividade com o broker no AKS.
+
+As imagens recebem tags por commit e execução. Para acrescentar uma versão como v1.2.3, preencha version na execução manual pela master. A Function App recebe um pacote ZIP do mesmo commit testado. Configure as variáveis Azure e a credencial federada deste repositório conforme o [guia da orquestração](https://github.com/Maicaoxd/fiap-cloud-games-orchestration/blob/master/k8s/azure/README.md#github-actions).

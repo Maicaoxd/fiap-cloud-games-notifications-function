@@ -1,0 +1,44 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Tag de versão opcional, por exemplo v1.2.3
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      id-token: write
+    uses: Maicaoxd/fiap-cloud-games-orchestration/.github/workflows/service-build.yml@master
+    with:
+      service: notifications-function
+      project: NotificationsFunction
+      source_ref: ${{ github.sha }}
+      publish: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
+      version: ${{ inputs.version || '' }}
+
+  deploy:
+    needs: build
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && vars.AZURE_FUNCTIONAPP_NAME != '' }}
+    permissions:
+      contents: read
+      id-token: write
+    uses: Maicaoxd/fiap-cloud-games-orchestration/.github/workflows/function-deploy.yml@master
+    with:
+      source_ref: ${{ github.sha }}
+      function_app: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
